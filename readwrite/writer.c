@@ -40,7 +40,7 @@ int main (int argc, char ** argv)
 
   /**
    * 设置mask, DDS_PUBLICATION_MATCHED_STATUS 表示 writer 和 reader 
-   * 需要拥有相同的topic 
+   * 需要拥有相同的topic  和兼容的qos
    */
   rc = dds_set_status_mask(writer, DDS_PUBLICATION_MATCHED_STATUS);
   if (rc != DDS_RETCODE_OK)

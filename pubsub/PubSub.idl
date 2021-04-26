@@ -1,0 +1,8 @@
+module PubSubModule
+{
+  struct DataType
+  {
+    unsigned long long count;
+    sequence<octet> payload;
+  };
+};

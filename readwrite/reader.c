@@ -39,9 +39,13 @@ int main (int argc, char ** argv)
   /* 设置qos */
   qos = dds_create_qos ();
 
-  /* 第二个参数 DDS_RELIABILITY_RELIABLE 为最大保证可靠性
-   * 读不到就一直读， 一直到超时
-   * 第三个参数为最大block 时间， 这里是 10秒超时*/
+  /**
+   * 可靠性
+   * DDS_RELIABILITY_RELIABLE: 可靠, 读不到就一直读， 一直到超时
+   * DDS_RELIABILITY_BEST_EFFORT: 尽量把
+   * 
+   * 第三个参数为最大block 时间， 这里是 10秒超时
+   */
   // dds_qset_reliability (qos, DDS_RELIABILITY_RELIABLE, DDS_SECS (10));
   dds_qset_reliability (qos, DDS_RELIABILITY_BEST_EFFORT, DDS_SECS (10));
 
