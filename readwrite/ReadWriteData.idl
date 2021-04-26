@@ -1,0 +1,22 @@
+module ReadWriteData
+{
+  struct Msg
+  {
+    long userID;
+    string message;
+  };
+  #pragma keylist Msg userID
+
+  struct MsgHaha
+  {
+    long userID;
+    string message;
+  };
+  #pragma keylist MsgHaha userID
+
+  struct MsgHehe
+  {
+    long userID;
+    string message;
+  };
+};
