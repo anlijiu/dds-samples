@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<dds xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:noNamespaceSchemaLocation="/home/anlijiu/rti_connext_dds-6.1.0/resource/schema/rti_dds_qos_profiles.xsd"
+     version="6.1.0">
+    <qos_library name="NvWa">
+        <qos_profile name="State" base_name="OneToManyMulticast">
+            <datawriter_qos>
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+                <history>
+                    <kind>KEEP_LAST_HISTORY_QOS</kind>
+                    <depth>1</depth>
+                </history>
+
+                <protocol>
+                    <rtps_reliable_writer>
+                        
+                        <!-- Send reliability heartbeats every 100 ms if there 
+                             is a reader waiting for data.  Send reliability 
+                             heartbeats every 100 ms if the queue is starting to
+                             fill and there is a reader waiting for data. (Note
+                             that no heartbeats are sent if there are no 
+                             readers waiting for data).  These heartbeats 
+                             determine how quickly data is re-sent if it was 
+                             lost the first time. -->
+                        <heartbeat_period>
+                            <sec>0</sec>
+                            <nanosec>100000000</nanosec>
+                        </heartbeat_period>
+                        <fast_heartbeat_period>
+                            <sec>0</sec>
+                            <nanosec>100000000</nanosec>
+                        </fast_heartbeat_period>
+                        <late_joiner_heartbeat_period>
+                            <sec>0</sec>
+                            <nanosec>100000000</nanosec>
+                        </late_joiner_heartbeat_period>
+                        
+                        <!-- Tells the DataWriter to not delay when it 
+                             receives a negative acknowledgement (NACK). -->
+                        <max_nack_response_delay>
+                            <sec>0</sec>
+                            <nanosec>0</nanosec>
+                        </max_nack_response_delay>
+
+                        <!-- Does not change behavior in a system with no
+                             multicast.  However, if somebody does enable 
+                             multicast on a DataReader, this will prevent 
+                             potential delays. -->
+                        <enable_multicast_periodic_heartbeat>true</enable_multicast_periodic_heartbeat>
+                    </rtps_reliable_writer>
+                </protocol>
+              
+            </datawriter_qos>
+
+            <!-- QoS used to configure the data reader created in the example code -->                
+            <datareader_qos>
+
+                <!-- Enabling reliability to ensure that the last update of
+                     each radar track is guaranteed to be delivered to the 
+                     DataReader -->
+                <reliability>
+                    <kind>RELIABLE_RELIABILITY_QOS</kind>
+                </reliability>
+
+              <!-- Reliably deliver the _most recent_ radar update -->
+              <history>
+                  <!-- If you need strict reliability, this should be changed 
+                       to keep all history. -->
+                  <kind>KEEP_LAST_HISTORY_QOS</kind>
+                  <depth>1</depth>
+                </history>
+              
+              <!-- Resource limits: to allow the application to specify
+                   a different number of maximum tracks that can be handled
+                   at once, the resource limits are being set in code. 
+                   -->
+              <!--<resource_limits>
+                <max_samples>128</max_samples>
+                <max_instances>64</max_instances>
+                <max_samples_per_instance>2</max_samples_per_instance>
+              </resource_limits>-->
+
+              <!-- Response delays in the DataReader are useful if there is a
+                   large fanout of readers to writers - they prevent the 
+                   readers from simultaneously resonding to heartbeats and 
+                   flooding the writers.  With smaller numbers of readers the
+                   delays can be set to zero.  -->
+                <protocol>
+                    <rtps_reliable_reader>
+                        <min_heartbeat_response_delay>
+                            <sec>0</sec>
+                            <nanosec>0</nanosec>
+                        </min_heartbeat_response_delay>
+                        <max_heartbeat_response_delay>
+                            <sec>0</sec>
+                            <nanosec>0</nanosec>
+                        </max_heartbeat_response_delay>
+                    </rtps_reliable_reader>
+                </protocol>
+
+            </datareader_qos>
+
+            <participant_qos>
+                <participant_name>
+                    <name>State</name>
+                </participant_name>
+
+            </participant_qos>
+        </qos_profile>
+    </qos_library>
+    
+</dds>

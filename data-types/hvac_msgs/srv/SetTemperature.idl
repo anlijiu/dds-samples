@@ -1,0 +1,18 @@
+
+#ifndef __hvac_msgs__srv__SetTemperature_Request__idl 
+#define __hvac_msgs__srv__SetTemperature_Request__idl 
+ 
+ 
+module hvac_msgs { module srv { 
+ 
+/**
+ * 空调目标温度
+ */
+struct SetTemperatureRequest { 
+    octet value;
+    long zone;
+}; 
+ 
+}; };  // module hvac_msgs::srv
+ 
+#endif  // __hvac_msgs__srv__SetTemperature_Request__idl

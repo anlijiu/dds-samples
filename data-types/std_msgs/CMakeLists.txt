@@ -4,6 +4,8 @@ list(APPEND idl_files "${CMAKE_CURRENT_SOURCE_DIR}/msg/ColorRGBA.idl")
 list(APPEND idl_files "${CMAKE_CURRENT_SOURCE_DIR}/msg/Duration.idl")
 list(APPEND idl_files "${CMAKE_CURRENT_SOURCE_DIR}/msg/Header.idl")
 list(APPEND idl_files "${CMAKE_CURRENT_SOURCE_DIR}/msg/Time.idl")
+list(APPEND idl_files "${CMAKE_CURRENT_SOURCE_DIR}/msg/VehicleArea.idl")
+list(APPEND idl_files "${CMAKE_CURRENT_SOURCE_DIR}/srv/Response.idl")
 
 
 connextdds_generate_soa_dds_types(

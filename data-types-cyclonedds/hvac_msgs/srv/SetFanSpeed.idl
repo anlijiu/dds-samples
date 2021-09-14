@@ -1,0 +1,17 @@
+#ifndef __hvac_msgs__srv__SetFanSpeed_Request__idl
+#define __hvac_msgs__srv__SetFanSpeed_Request__idl
+ 
+ 
+module hvac_msgs { module srv { 
+ 
+/**
+ * 空调风速调节请求
+ */
+struct SetFanSpeedRequest { 
+    octet value;
+    long zone;
+}; 
+ 
+}; };  // module hvac_msgs::srv
+ 
+#endif //__hvac_msgs__srv__SetFanSpeed_Request__idl

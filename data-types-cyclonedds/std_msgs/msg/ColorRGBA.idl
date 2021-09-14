@@ -1,0 +1,15 @@
+#ifndef __std_msgs__msg__ColorRGBA__idl 
+#define __std_msgs__msg__ColorRGBA__idl 
+ 
+module std_msgs { module msg { 
+ 
+struct ColorRGBA { 
+    float r; 
+    float g; 
+    float b; 
+    float a; 
+}; 
+ 
+}; };  // module msg::std_msgs 
+ 
+#endif  // __std_msgs__msg__ColorRGBA__idl 

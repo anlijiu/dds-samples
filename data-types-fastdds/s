@@ -1,0 +1,24 @@
+#!/bin/bash
+
+BASE=$(pwd)
+modules=(std_msgs hvac_msgs)
+msg_types=(msg srv)
+
+
+for i in "${modules[@]}"
+do
+  for j in "${msg_types[@]}"
+  do
+    [ -d "build/$i/$j" ] ||  mkdir -p "build/$i/$j"
+    cd "build/$i/$j"
+    for absfilename in $BASE/$i/$j/*.idl; do
+        # cyclone idlc 0.8.0版本用绝对路径当idl文件中有include的时候回报错
+        # 所以转换为相对路径
+        relativefilename=$(realpath --relative-to=$(pwd) $absfilename)
+        fastddsgen -I $BASE   $relativefilename
+    done
+    cd - > /dev/null
+  done
+  # sudo cp "build/$i" /usr/local/include -r
+  # sudo cp "build/$i" /usr/local/android/include -r
+done

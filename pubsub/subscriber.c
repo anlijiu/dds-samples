@@ -23,8 +23,8 @@ static volatile sig_atomic_t done = false;
 
 static void data_available_handler (dds_entity_t reader, void *arg);
 static void process_samples(dds_entity_t reader);
-static dds_entity_t prepare_dds(dds_entity_t *reader, const char *partitionName);
-static void finalize_dds(dds_entity_t participant);
+static dds_entity_t prepare_dds(dds_entity_t *reader, dds_entity_t *rdcond, const char *partitionName);
+static void finalize_dds(dds_entity_t participant, dds_entity_t rdcond);
 
 static void sigint (int sig)
 {
@@ -38,20 +38,21 @@ int main (int argc, char **argv)
 
   dds_entity_t participant;
   dds_entity_t reader;
+  dds_entity_t rdcond;
 
   printf ("Partition: %s\n", partitionName);
   fflush (stdout);
 
-  participant = prepare_dds(&reader, partitionName);
+  participant = prepare_dds(&reader, &rdcond, partitionName);
 
   printf ("=== [Subscriber] Waiting for samples...\n");
   fflush (stdout);
 
   signal (SIGINT, sigint);
   process_samples(reader);
-
   (void) dds_set_status_mask (reader, 0);
-  finalize_dds (participant);
+
+  finalize_dds (participant, rdcond);
   return EXIT_SUCCESS;
 }
 
@@ -64,6 +65,8 @@ static int do_take (dds_entity_t reader)
   info = dds_alloc (sizeof(dds_sample_info_t) * MAX_SAMPLES);
 
   samples_received = dds_take (reader, samples, info, MAX_SAMPLES, MAX_SAMPLES);
+
+  printf("do_take in receive %d samples \n", samples_received);
   if (samples_received < 0)
   {
     dds_free( info );
@@ -76,6 +79,7 @@ static int do_take (dds_entity_t reader)
     {
       ph = info[i].publication_handle;
       PubSubModule_DataType * this_sample = &data[i];
+      this_sample->payload._buffer[this_sample->payload._length] = '\0';
       printf("receive count: %lu, payload: %s\n", this_sample->count, this_sample->payload._buffer);
     }
   }
@@ -94,24 +98,29 @@ static void process_samples(dds_entity_t reader)
   dds_return_t status;
   unsigned long long prev_bytes = 0;
   unsigned long long prev_samples = 0;
-  dds_attach_t wsresults[2];
+  dds_attach_t wsresults[10];
 
+  // while (!done && !dds_triggered (waitSet))
+  // while (!done && !dds_triggered (waitSet))
   while (!done)
   {
-      status = dds_waitset_wait (waitSet, wsresults, sizeof(wsresults)/sizeof(wsresults[0]), DDS_MSECS(100));
+      status = dds_waitset_wait (waitSet, wsresults, sizeof(wsresults)/sizeof(wsresults[0]), DDS_MSECS(1000));
+      // status = dds_waitset_wait (waitSet, wsresults, 10U, DDS_INFINITY);
+      printf(" dds_waitset_wait return : %d\n", status);
       if (status < 0)
         DDS_FATAL("dds_waitset_wait: %s\n", dds_strretcode(-status));
+      do_take(reader);
   }
 
   fflush (stdout);
 }
 
-static dds_entity_t prepare_dds(dds_entity_t *reader, const char *partitionName)
+static dds_entity_t prepare_dds(dds_entity_t *reader, dds_entity_t *rdcond, const char *partitionName)
 {
   dds_return_t status;
   dds_entity_t topic;
   dds_entity_t subscriber;
-  dds_listener_t *rd_listener;
+  // dds_listener_t *rd_listener;
   dds_entity_t participant;
 
   int32_t maxSamples = 4000;
@@ -143,20 +152,17 @@ static dds_entity_t prepare_dds(dds_entity_t *reader, const char *partitionName)
   /* A Reader is created on the Subscriber & Topic with a modified Qos. */
 
   dds_qset_reliability (drQos, DDS_RELIABILITY_RELIABLE, DDS_SECS (10));
+  // dds_qset_history (drQos, DDS_HISTORY_KEEP_LAST, 1);
   dds_qset_history (drQos, DDS_HISTORY_KEEP_ALL, 0);
-  dds_qset_resource_limits (drQos, maxSamples, DDS_LENGTH_UNLIMITED, DDS_LENGTH_UNLIMITED);
+  // dds_qset_resource_limits (drQos, maxSamples, DDS_LENGTH_UNLIMITED, DDS_LENGTH_UNLIMITED);
 
-  rd_listener = dds_create_listener(NULL);
-  dds_lset_data_available(rd_listener, data_available_handler);
+  // rd_listener = dds_create_listener(NULL);
+  // dds_lset_data_available(rd_listener, data_available_handler);
 
   /* A Read Condition is created which is triggered when data is available to read */
   waitSet = dds_create_waitset (participant);
   if (waitSet < 0)
     DDS_FATAL("dds_create_waitset: %s\n", dds_strretcode(-waitSet));
-
-  status = dds_waitset_attach (waitSet, waitSet, waitSet);
-  if (status < 0)
-    DDS_FATAL("dds_waitset_attach: %s\n", dds_strretcode(-status));
 
 
   memset (data, 0, sizeof (data));
@@ -165,17 +171,26 @@ static dds_entity_t prepare_dds(dds_entity_t *reader, const char *partitionName)
     samples[i] = &data[i];
   }
 
-  *reader = dds_create_reader (subscriber, topic, drQos, rd_listener);
+  *reader = dds_create_reader (subscriber, topic, drQos, NULL);
   if (*reader < 0)
     DDS_FATAL("dds_create_reader: %s\n", dds_strretcode(-*reader));
 
+  // dds_entity_t rdcond = dds_create_readcondition (*reader, DDS_READ_SAMPLE_STATE );
+  //DDS_ALIVE_INSTANCE_STATE);//,DDS_ANY_STATE);
+  //DDS_ANY_SAMPLE_STATE 
+  *rdcond = dds_create_readcondition (*reader, DDS_ANY_SAMPLE_STATE );
+  
+  status = dds_waitset_attach (waitSet, *rdcond, *rdcond);
+  if (status < 0)
+    DDS_FATAL("dds_waitset_attach: %s\n", dds_strretcode(-status));
+
   dds_delete_qos (drQos);
-  dds_delete_listener(rd_listener);
+  // dds_delete_listener(rd_listener);
 
   return participant;
 }
 
-static void finalize_dds(dds_entity_t participant)
+static void finalize_dds(dds_entity_t participant, dds_entity_t rdcond)
 {
   dds_return_t status;
 
@@ -184,7 +199,7 @@ static void finalize_dds(dds_entity_t participant)
     PubSubModule_DataType_free (&data[i], DDS_FREE_CONTENTS);
   }
 
-  status = dds_waitset_detach (waitSet, waitSet);
+  status = dds_waitset_detach (waitSet, rdcond);
   if (status < 0)
     DDS_FATAL("dds_waitset_detach: %s\n", dds_strretcode(-status));
   status = dds_delete (waitSet);

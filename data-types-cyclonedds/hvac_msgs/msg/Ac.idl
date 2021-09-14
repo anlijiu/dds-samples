@@ -1,0 +1,17 @@
+#ifndef __hvac_msgs__msg__Ac__idl 
+#define __hvac_msgs__msg__Ac__idl 
+ 
+module hvac_msgs { module msg { 
+
+const string TOPIC_AC = "hvac_msgs/msg/Ac";
+
+struct Ac { 
+    long zone;//@key
+    boolean on; 
+}; 
+
+#pragma keylist Ac zone 
+ 
+}; };  // module msg::hvac_msgs 
+ 
+#endif  // __hvac_msgs__msg__Ac__idl 

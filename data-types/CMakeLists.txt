@@ -20,9 +20,11 @@ set (top_level_source_dir "${CMAKE_CURRENT_SOURCE_DIR}/")
 connextdds_sanitize_library_language(LANG ${LANG} VAR lang_var)
 
 add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/std_msgs")
+add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/hvac_msgs")
 
 add_library(SoaDataTypes
     $<TARGET_OBJECTS:stdlibrary>
+    $<TARGET_OBJECTS:hvaclibrary>
 )
 
 target_link_libraries(SoaDataTypes 

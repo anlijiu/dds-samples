@@ -1,0 +1,18 @@
+
+#ifndef __hvac_msgs__srv__SetPtc_Request__idl 
+#define __hvac_msgs__srv__SetPtc_Request__idl 
+ 
+ 
+module hvac_msgs { module srv { 
+ 
+/**
+ * 空调辅助加热开关
+ */
+struct SetPtcRequest { 
+    boolean on; 
+    long zone;
+}; 
+ 
+}; };  // module hvac_msg::ssrv
+ 
+#endif  // __hvac_msgs__srv__SetPtc_Request__idl

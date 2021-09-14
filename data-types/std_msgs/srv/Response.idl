@@ -1,0 +1,33 @@
+#ifndef __std_msgs__srv__Response__idl
+#define __std_msgs__srv__Response__idl
+ 
+module std_msgs { module srv { 
+
+
+enum ResponseStatus {
+        /*
+         * Indicates that this reply contains a new sequence of
+         * prime numbers for a request, but there are still more to come
+         */
+        REPLY_IN_PROGRESS,
+        /*
+         * Indicates that this is the last sequence of 
+         * prime numbers for a request.
+         */
+        REPLY_COMPLETED,
+        /*
+         * Indicates that there was an error. After an error
+         * there won't be any more replies for a request
+         */
+        REPLY_ERROR
+};
+ 
+struct Response { 
+    string error;
+    ResponseStatus status;
+}; 
+ 
+};  // module srv
+}; //module std_msg
+ 
+#endif  // __std_msgs__srv__Response__idl

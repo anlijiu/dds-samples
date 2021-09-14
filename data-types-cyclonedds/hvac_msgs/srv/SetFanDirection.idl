@@ -1,0 +1,17 @@
+#ifndef __hvac_msgs__srv__SetFanDirection_Request__idl
+#define __hvac_msgs__srv__SetFanDirection_Request__idl
+ 
+ 
+module hvac_msgs { module srv { 
+ 
+/**
+ * 空调风向调节请求
+ */
+struct SetFanDirectionRequest { 
+    octet value;
+    long zone;
+}; 
+ 
+}; };  // module hvac_msgs::srv
+ 
+#endif //__hvac_msgs__srv__SetFanDirection_Request__idl

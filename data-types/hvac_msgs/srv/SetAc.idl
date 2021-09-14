@@ -1,0 +1,17 @@
+#ifndef __hvac_msgs__srv__SetAc_Request__idl 
+#define __hvac_msgs__srv__SetAc_Request__idl 
+ 
+ 
+module hvac_msgs { module srv { 
+ 
+/**
+ * 空调Ac开关
+ */
+struct SetAcRequest { 
+    boolean on; 
+    long zone;
+}; 
+ 
+}; };  // module srv::hvac_msgs
+ 
+#endif  // __hvac_msgs__srv__SetAc_Request__idl
