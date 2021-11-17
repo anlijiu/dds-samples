@@ -61,24 +61,9 @@ bool printVehicleProperty(VehiclePropValuePtr ptr) {
     return true;
 }
 
-void initDefaultQos() {
-    std::vector<std::string> qosFileNames;
-    std::cout<< "DDSMessageAdapter init " << std::endl;
-
-    qosFileNames.push_back("file:///home/anlijiu/disk/workspace/dds/dds-samples/hu-demo/base_qos_profiles.xml");
-    qosFileNames.push_back("file:///home/anlijiu/disk/workspace/dds/dds-samples/hu-demo/lowlatency_sensor_qos_profiles.xml");
-    qosFileNames.push_back("file:///home/anlijiu/disk/workspace/dds/dds-samples/hu-demo/state_qos_profiles.xml");
-    qosFileNames.push_back("file:///home/anlijiu/disk/workspace/dds/dds-samples/hu-demo/request_reply_qos_profiles.xml");
-
-    rti::core::QosProviderParams params;
-    params.url_profile(qosFileNames);                                                                                             
-    rti::core::default_qos_provider_params(params);
-}
-
 int main(int argc, char *argv[])
 {
     std::cout << " main thread id: " << std::this_thread::get_id() << std::endl;
-    initDefaultQos();
 
     auto adapter = std::make_unique<DDSMessageAdapter>();
     adapter->bind(std::bind(printVehicleProperty, std::placeholders::_1));

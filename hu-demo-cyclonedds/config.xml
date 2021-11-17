@@ -17,7 +17,7 @@
     <Id>3</Id>
   </Domain>
   <General>
-    <NetworkInterfaceAddress>127.0.0.1</NetworkInterfaceAddress>
+    <NetworkInterfaceAddress>auto</NetworkInterfaceAddress>
     <AllowMulticast>true</AllowMulticast>
     <EnableMulticastLoopback>true</EnableMulticastLoopback>
   </General>

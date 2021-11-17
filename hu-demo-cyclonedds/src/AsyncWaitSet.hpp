@@ -3,6 +3,7 @@
 
 #include <dds/core/cond/StatusCondition.hpp>
 #include <memory>
+#include <thread>
 #include "dds/dds.hpp"
 #include "ThreadPool.hpp"
 
@@ -28,7 +29,7 @@ public:
     void start();
     void stop();
 
-    ::dds::core::cond::WaitSet& attach_condition(const ::dds::core::cond::Condition& cond);
+    void attach_condition(const ::dds::core::cond::Condition& cond);
 
     bool detach_condition(const ::dds::core::cond::Condition& cond);
 };

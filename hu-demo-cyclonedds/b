@@ -1,0 +1,35 @@
+#!/bin/bash
+
+[[ -d buildandroid ]] || mkdir buildandroid
+
+cd buildandroid
+
+export ANDROID_NDK=/home/anlijiu/Android/Sdk/ndk/23.1.7779620
+# export ANDROID_NDK=/home/anlijiu/Android/Sdk/ndk/22.0.7026061
+export TOOLCHAIN=$ANDROID_NDK/toolchains/llvm/prebuilt/linux-x86_64
+
+# Only choose one of these, depending on your device...
+# export TARGET=armv7a-linux-androideabi
+export TARGET=aarch64-linux-android
+# Set this to your minSdkVersion.
+export API=30
+# Configure and build.
+
+export OPENSSL_ROOT_DIR=/usr/local/android
+export ANDROID_PLATFORM=android-${API}
+
+export INSTALL_DIR=/usr/local/android
+
+cmake -DANDROID=true \
+    -DCycloneDDS_DIR=/usr/local/android/lib/cmake/CycloneDDS \
+    -DCycloneDDS-CXX_DIR=/usr/local/android/lib/cmake/CycloneDDS-CXX \
+    -DCMAKE_CROSSCOMPILING=true \
+    -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
+    -DANDROID_NDK=$ANDROID_NDK \
+    -DANDROID_PLATFORM=$ANDROID_PLATFORM \
+    -DANDROID_ABI="arm64-v8a" \
+    -DANDROID_NDK_HOST_X64="YES" \
+    -DANDROID_TOOLCHAIN_NAME="aarch64-linux-android" \
+    -DCMAKE_TOOLCHAIN_FILE="$ANDROID_NDK/build/cmake/android.toolchain.cmake" \
+    ..
+

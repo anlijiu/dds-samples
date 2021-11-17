@@ -1,5 +1,3 @@
-#include <rti/core/cond/AsyncWaitSet.hpp>
-
 #include <vector>
 #include <string>
 
@@ -10,13 +8,13 @@ namespace headunit {
 namespace dds {
 
 DDSMessageAdapter::DDSMessageAdapter()
-    : mAsyncWaitset(::dds::core::null)
+    : mAsyncWaitset(AsyncWaitSet(4))
     , mHvacModulePtr(nullptr)
 {
     std::cout << __func__ << std::endl;
     int domain_id = 0;
     int thread_pool_size = 4;
-    mAsyncWaitset = AsyncWaitSet(thread_pool_size);
+    // mAsyncWaitset = AsyncWaitSet(thread_pool_size);
 
     mHvacModulePtr = std::make_unique<hvac::HvacModule>(mAsyncWaitset, std::bind(&DDSMessageAdapter::onNewProperty, this, std::placeholders::_1), getValuePool(), domain_id);
     addWriteMap(mHvacModulePtr->getWritePropValueMap());
@@ -35,7 +33,6 @@ void DDSMessageAdapter::receive_thread() {
 
         while (1) {
             usleep(1000000);
-            // rti::util::sleep(dds::core::Duration(1));
         }
 
 

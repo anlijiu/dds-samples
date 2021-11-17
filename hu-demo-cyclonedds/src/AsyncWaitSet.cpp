@@ -6,7 +6,6 @@ namespace dds {
 AsyncWaitSet::AsyncWaitSet(int threads_num)
     : mThreadPool(std::make_unique<ThreadPool>(threads_num))
     , mWaitGuardCond(std::bind(&AsyncWaitSet::handleGuard, this ))
-    , mWaitSet()
 {
 }
 
@@ -38,11 +37,11 @@ void AsyncWaitSet::run() {
     }
 }
 
-::dds::core::cond::WaitSet& AsyncWaitSet::attach_condition(const dds::core::cond::Condition& cond) {
-    return mWaitSet.attach_condition(cond);
+void AsyncWaitSet::attach_condition(const ::dds::core::cond::Condition& cond) {
+    mWaitSet.attach_condition(cond);
 }
 
-bool AsyncWaitSet::detach_condition(const dds::core::cond::Condition& cond) {
+bool AsyncWaitSet::detach_condition(const ::dds::core::cond::Condition& cond) {
     return mWaitSet.detach_condition(cond);
 }
     

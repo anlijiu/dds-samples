@@ -18,11 +18,10 @@ HvacModule::HvacModule(
     AsyncWaitSet& async_waitset,
     std::function<void(VehiclePropValuePtr)> func,
     VehiclePropValuePool* pool,
-    DDS_DomainId_t domain_id
+    int domain_id
 ) : mReaderAc(::dds::core::null),
     mParticipant(::dds::core::null),
     mTopicAc(::dds::core::null),
-    mSetAcRequester(::dds::core::null),
     mAsyncWaitSet(async_waitset),
     mValueObjectPoolPtr(pool),
     mWritePropValueMap({
@@ -38,7 +37,8 @@ HvacModule::HvacModule(
     utils::find_or_create_topic<hvac_msgs::msg::Ac>(
             mParticipant, mTopicAc, hvac_msgs::msg::TOPIC_AC);
 
-    dds::sub::qos::SubscriberQos acSubscriberQos = mParticipant.default_subscriber_qos();
+    ::dds::sub::qos::SubscriberQos acSubscriberQos = mParticipant.default_subscriber_qos();
+    ::dds::sub::qos::DataReaderQos acDataReaderQos(mTopicAc.qos());
 
     utils::create_datareader<hvac_msgs::msg::Ac>(
             mReaderAc,
@@ -51,22 +51,8 @@ HvacModule::HvacModule(
     ::dds::core::cond::StatusCondition acReadStatusCondition(mReaderAc);
     acReadStatusCondition.enabled_statuses(
             ::dds::core::status::StatusMask::data_available());
-    acReadStatusCondition->handler(std::bind(&HvacModule::process_samples_ac, this, func));
+    acReadStatusCondition.handler(std::bind(&HvacModule::process_samples_ac, this, func));
     mAsyncWaitSet.attach_condition(acReadStatusCondition);
-
-
-    RequesterParams set_ac_requester_params(mParticipant);
-    set_ac_requester_params.service_name("Hvac::Ac");
-    set_ac_requester_params.datawriter_qos(defaultQosProvider.datawriter_qos(
-            "RequestReply::Requester"));
-    set_ac_requester_params.datareader_qos(defaultQosProvider.datareader_qos(
-            "RequestReply::Requester"));
-
-    mSetAcRequester = request::Requester<hvac_msgs::srv::SetAcRequest, std_msgs::srv::Response>(set_ac_requester_params);
-
-    // while (rti::request::matched_replier_count(mSetAcRequester) == 0) {
-    //     rti::util::sleep(::dds::core::Duration::from_millisecs(100));
-    // }
 }
 
 HvacModule::~HvacModule()
@@ -87,11 +73,11 @@ void HvacModule::process_samples_ac(std::function<void(VehiclePropValuePtr)> fun
 
     // Release status condition in case other threads can process outstanding
     // samples
-    mAsyncWaitSet.unlock_condition(
-            ::dds::core::cond::StatusCondition(mReaderAc));
+    // mAsyncWaitSet.unlock_condition(
+    //         ::dds::core::cond::StatusCondition(mReaderAc));
 
     // Process sample
-    for (::dds::sub::LoanedSamples<hvac_msgs::msg::Ac>::iterator sample_it =
+    for (::dds::sub::LoanedSamples<hvac_msgs::msg::Ac>::const_iterator sample_it =
                  samples.begin();
          sample_it != samples.end();
          sample_it++) {
@@ -121,50 +107,13 @@ StatusCode HvacModule::set_ac(const VehiclePropValue& propValue) {
     std::cout << " HvacModule::set_ac thread id: " << std::this_thread::get_id() << std::endl;
 
     std::cout << "set_ac in" << propValue.value.int32Values[0] <<  std::endl;
-    auto request_id =
-            mSetAcRequester.send_request(hvac_msgs::srv::SetAcRequest(propValue.value.int32Values[0], propValue.areaId));
+    // auto request_id =
+    //         mSetAcRequester.send_request(hvac_msgs::srv::SetAcRequest(propValue.value.int32Values[0], propValue.areaId));
 
     // Receive replies
     const auto MAX_WAIT = ::dds::core::Duration::from_secs(20);
+    return StatusCode::OK;
 
-    bool in_progress = true;
-    while(in_progress) {
-        auto replies = mSetAcRequester.receive_replies(MAX_WAIT);
-        std::cout << "set_ac receive " << replies.length() << " samples" << std::endl;
-
-        // When receive_replies times out,
-        // it returns an empty reply collection
-        if (replies.length() == 0) {
-            std::cout<< "ResponseStatus::TIMEOUT" << std::endl;
-            return StatusCode::TIMEOUT;
-        }
-
-        // Print the prime numbers we receive
-        for (const auto& reply : replies) {
-            if (!reply.info().valid()) {
-                continue;
-            }
-
-            for (auto error: reply.data().error()) {
-                std::cout << " reply.data().error(): " << error << " ";
-            }
-
-            if (reply.data().status() != std_msgs::srv::ResponseStatus::REPLY_IN_PROGRESS) {
-                in_progress = false;
-                if (reply.data().status() == std_msgs::srv::ResponseStatus::REPLY_ERROR) {
-
-                    std::cout<< "ResponseStatus::REPLY_ERROR" << std::endl;
-                    return StatusCode::INTERNAL_ERROR;
-                    // throw std::runtime_error("Error in replier");
-                } else { // reply->status == COMPLETED
-                    std::cout << "DONE";
-                    return StatusCode::OK;
-                }
-            }
-
-            std::cout << std::endl;
-        }
-    }
 }
 
 } // hvac

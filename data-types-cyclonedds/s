@@ -21,4 +21,5 @@ do
   done
   sudo cp "build/$i" /usr/local/include -r
   sudo cp "build/$i" /usr/local/android/include -r
+  sudo cp "build/$i" /usr/local/qnx/include -r
 done

@@ -1,0 +1,17 @@
+#!/bin/bash
+
+. /home/anlijiu/data/8155/qnx700/qnxsdp-env.sh
+
+export INSTALL_DIR=/usr/local/qnx
+
+cmake \
+    -DCycloneDDS_DIR=/usr/local/qnx/lib/cmake/CycloneDDS \
+    -DCycloneDDS-CXX_DIR=/usr/local/qnx/lib/cmake/CycloneDDS-CXX \
+    -DCMAKE_CROSSCOMPILING=true \
+    -DCMAKE_INSTALL_PREFIX=${INSTALL_DIR} \
+    -DCMAKE_TOOLCHAIN_FILE=./qnx.cmake \
+    -DCMAKE_VERBOSE_MAKEFILE=on \
+    -G "Unix Makefiles" \
+    ..
+
+make -j4
