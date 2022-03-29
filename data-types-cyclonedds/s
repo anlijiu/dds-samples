@@ -1,25 +1,23 @@
 #!/bin/bash
 
-BASE=$(pwd)
-modules=(std_msgs hvac_msgs)
-msg_types=(msg srv)
+BUILD_TYPE=Debug
+BUILD_DIR="build"
+INSTALL_DIR="/usr/local"
 
+rm -rf "${BUILD_DIR}"
 
-for i in "${modules[@]}"
-do
-  for j in "${msg_types[@]}"
-  do
-    [ -d "build/$i/$j" ] ||  mkdir -p "build/$i/$j"
-    cd "build/$i/$j"
-    for absfilename in $BASE/$i/$j/*.idl; do
-        # cyclone idlc 0.8.0版本用绝对路径当idl文件中有include的时候回报错
-        # 所以转换为相对路径
-        relativefilename=$(realpath --relative-to=$(pwd) $absfilename)
-        idlc -I $BASE -l cxx  $relativefilename
-    done
-    cd - > /dev/null
-  done
-  sudo cp "build/$i" /usr/local/include -r
-  sudo cp "build/$i" /usr/local/android/include -r
-  sudo cp "build/$i" /usr/local/qnx/include -r
-done
+cmake -B "${BUILD_DIR}" \
+    -DCMAKE_INSTALL_PREFIX="${INSTALL_DIR}" \
+    -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
+    -DCPACK_OUTPUT_FILE_PREFIX="${INSTALL_DIR}"
+
+echo "000"
+cmake --build "${BUILD_DIR}"
+
+cd ${BUILD_DIR}
+
+# make  test CTEST_OUTPUT_ON_FAILURE=TRUE GTEST_COLOR=TRUE
+
+sudo make install
+
+# sudo make package
