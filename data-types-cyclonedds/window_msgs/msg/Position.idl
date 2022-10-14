@@ -1,0 +1,17 @@
+#ifndef __window_msgs__msg__Position__idl 
+#define __window_msgs__msg__Position__idl 
+ 
+module window_msgs { module msg { 
+
+const string TOPIC_WINDOW_POSITION = "window_msgs/msg/Position";
+
+struct Position { 
+    long zone;//@key
+    long persent;
+}; 
+
+#pragma keylist Position zone
+ 
+}; };  // module msg::window_msgs 
+ 
+#endif  // __window_msgs__msg__Position__idl 

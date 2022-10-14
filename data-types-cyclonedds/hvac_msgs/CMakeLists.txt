@@ -3,8 +3,8 @@ project(hvaclibrary LANGUAGES C CXX VERSION 1.0)
 
 include(GNUInstallDirs)
 
-find_package(CycloneDDS-CXX REQUIRED)
-find_package(CycloneDDS REQUIRED)
+# find_package(CycloneDDS-CXX REQUIRED)
+# find_package(CycloneDDS REQUIRED)
 
 include("../Generate.cmake")
 # include("${CycloneDDS-CXX}/idlcxx/Generate.cmake")
@@ -12,6 +12,8 @@ include("../Generate.cmake")
 idlcxx_generate(IDLCXX_SRCS IDLCXX_HDRS TARGET hvacdatatypes
 # idlcxx_generate(TARGET hvacdatatypes
     FILES "${CMAKE_CURRENT_SOURCE_DIR}/msg/Ac.idl"
+          "${CMAKE_CURRENT_SOURCE_DIR}/msg/Hvac.idl"
+          "${CMAKE_CURRENT_SOURCE_DIR}/srv/HvacSrv.idl"
           "${CMAKE_CURRENT_SOURCE_DIR}/srv/SetPower.idl"
           "${CMAKE_CURRENT_SOURCE_DIR}/srv/SetRecirc.idl"
           "${CMAKE_CURRENT_SOURCE_DIR}/srv/SetFanSpeed.idl"
@@ -43,7 +45,10 @@ write_basic_package_version_file(
     COMPATIBILITY AnyNewerVersion
     )   
 
-install(FILES ${IDLCXX_SRCS} ${IDLCXX_HDRS} DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/hvac_msgs")
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/msg DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/hvac_msgs")
+install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/srv DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/hvac_msgs")
+
+# install(FILES ${IDLCXX_SRCS} ${IDLCXX_HDRS} DESTINATION "${CMAKE_INSTALL_FULL_INCLUDEDIR}/hvac_msgs")
 
 # install(TARGETS hvacdatatypes
 #         EXPORT DataTypesHvacTargets

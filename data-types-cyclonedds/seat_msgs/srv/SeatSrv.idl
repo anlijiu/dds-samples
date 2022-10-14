@@ -1,0 +1,14 @@
+#ifndef __seat_msgs__srv__Seat__idl 
+#define __seat_msgs__srv__Seat__idl 
+ 
+ 
+module seat_msgs { module srv { 
+
+const string TOPIC_SET_SEAT_POSITION = "seat_msgs/srv/SetPosition";
+const string TOPIC_SET_SEAT_HEAT = "seat_msgs/srv/SetHeat";
+const string TOPIC_SET_SEAT_VENTILATE = "seat_msgs/msg/SetVentilate";
+
+ 
+}; };  // module srv::seat_msgs
+ 
+#endif  // __seat_msgs__srv__Seat__idl

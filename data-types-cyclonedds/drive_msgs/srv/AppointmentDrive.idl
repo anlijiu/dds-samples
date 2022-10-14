@@ -1,0 +1,18 @@
+#ifndef __drive_msgs__srv__AppointmentDrive_Request__idl 
+#define __drive_msgs__srv__AppointmentDrive_Request__idl 
+ 
+ 
+module drive_msgs { module srv { 
+
+const string TOPIC_SET_APPOINTMENT_DRIVE = "drive_msgs/srv/SetAppointmentDrive";
+
+/**
+ * 预约驾驶时间
+ */
+struct AppointmentDrive { 
+    long time;//unix 时间戳 秒
+}; 
+ 
+}; };  // module drive_msgs::srv
+ 
+#endif  // __drive_msgs__srv__AppointmentDrive_Request__idl

@@ -319,3 +319,8 @@ uint64_t elapsedRealtimeNano()
                   now().time_since_epoch()).count();
     return ns; 
 }
+
+uint64_t getUnitTimestamp() {
+    return std::chrono::duration_cast<std::chrono::seconds>(
+                   std::chrono::system_clock::now().time_since_epoch()).count();
+}

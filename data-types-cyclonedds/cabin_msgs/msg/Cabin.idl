@@ -1,0 +1,10 @@
+#ifndef __cabin_msgs__msg__Temperature__idl 
+#define __cabin_msgs__msg__Temperature__idl 
+ 
+module cabin_msgs { module msg { 
+
+const string TOPIC_CABIN_TEMPERATURE = "cabin_msgs/msg/Temperature";
+
+}; };  // module msg::cabin_msgs 
+ 
+#endif  // __cabin_msgs__msg__Temperature__idl 

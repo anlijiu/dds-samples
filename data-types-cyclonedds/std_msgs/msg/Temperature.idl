@@ -1,0 +1,15 @@
+#ifndef __std_msgs__msg__Temperature__idl
+#define __std_msgs__msg__Temperature__idl
+
+module std_msgs { module msg { 
+
+struct Temperature { 
+    float value; 
+    long zone;//@key
+}; 
+
+#pragma keylist Temperature zone 
+ 
+}; };  // module msg::std_msgs
+ 
+#endif  // __std_msgs__msg__Temperature__idl

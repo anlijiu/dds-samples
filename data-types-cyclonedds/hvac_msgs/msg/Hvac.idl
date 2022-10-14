@@ -1,0 +1,18 @@
+#ifndef __hvac_msgs__msg__idl 
+#define __hvac_msgs__msg__idl 
+ 
+module hvac_msgs { module msg { 
+
+const string TOPIC_ENV_OUT_TEMPERATURE = "hvac_msgs/msg/EnvOutTemperature";
+const string TOPIC_HVAC_CURRENT_TEMPERATURE = "hvac_msgs/msg/CurrentTemperature";
+
+const string TOPIC_STEERING_WHEEL_HEAT = "hvac_msgs/msg/STEERING_WHEEL_HEAT";
+
+/* 方向盘加热状态 */
+struct SteeringWheelHeat {
+    short level;// -2, -1, 0, 1, 2      负数冷， 正数热， 0不工作 
+};
+
+}; };  // module msg::hvac_msgs 
+ 
+#endif  // __hvac_msgs__msg__idl 

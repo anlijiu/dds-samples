@@ -5,6 +5,8 @@
 #include <dds/dds.hpp>
 #include "AsyncWaitSet.hpp"
 #include "HvacModule.hpp"
+#include "SeatModule.hpp"
+#include "HabitModule.hpp"
 #include "parallel_hashmap/phmap.h"
 
 #include "vhal_compatible.hpp"
@@ -28,6 +30,8 @@ private:
     std::thread mReceiveThread;
 
     std::unique_ptr<hvac::HvacModule> mHvacModulePtr;
+    std::unique_ptr<seat::SeatModule> mSeatModulePtr;
+    std::unique_ptr<habit::HabitModule> mHabitModulePtr;
     AsyncWaitSet mAsyncWaitset;
     phmap::flat_hash_map<int32_t, std::function<StatusCode(const VehiclePropValue &)>> mWriteMap;
 };

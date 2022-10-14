@@ -3,6 +3,7 @@
 
 #include "CanMessageDistributor.hpp"
 #include "HvacModule.hpp"
+#include "SeatModule.hpp"
 #include "TimeoutTrigger.hpp"
 
 namespace dashboard {
@@ -14,6 +15,7 @@ public:
 private:
     CanMessageDistributor * mCanMessageDistributor;
     hvac::HvacModule * mHvacModule;
+    seat::SeatModule * mSeatModule;
     TimeoutTrigger * mTimeoutTrigger;
 };
 

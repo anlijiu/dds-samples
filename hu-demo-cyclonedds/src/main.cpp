@@ -92,6 +92,16 @@ int main(int argc, char *argv[])
 
             StatusCode s = adapter->writeValue(acValue);
             std::cout << "main.cpp  writeValue return code: " << s << std::endl;
+
+
+            VehiclePropValue appointDriveValue;
+            appointDriveValue.prop = toInt(VehicleProperty::APPOINTMENT_DRIVE);
+            appointDriveValue.areaId = 0;
+            appointDriveValue.value.int64Values.resize(1);
+            uint64_t now = getUnitTimestamp();
+            appointDriveValue.value.int64Values[0] = now + 3600;
+            adapter->writeValue(appointDriveValue);
+
         }
         std::cout << line << std::endl;
     }

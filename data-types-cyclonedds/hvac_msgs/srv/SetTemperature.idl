@@ -4,14 +4,9 @@
  
  
 module hvac_msgs { module srv { 
- 
-/**
- * 空调目标温度
- */
-struct SetTemperatureRequest { 
-    octet value;
-    long zone;
-}; 
+
+const string TOPIC_HVAC_SET_TEMPERATURE = "hvac_msgs/srv/SetTemperature";
+
  
 }; };  // module hvac_msgs::srv
  

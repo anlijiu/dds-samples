@@ -1,0 +1,41 @@
+#ifndef __seat_msgs__msg__idl 
+#define __seat_msgs__msg__idl 
+ 
+module seat_msgs { module msg { 
+
+const string TOPIC_SEAT_POSITION = "seat_msgs/msg/Position";//座椅位置
+const string TOPIC_SEAT_HEAT = "seat_msgs/msg/Heat"; //座椅加热
+const string TOPIC_SEAT_VENTILATE = "seat_msgs/msg/Ventilate"; //座椅通风
+const string TOPIC_SEAT_OCCUPANCY = "seat_msgs/msg/Occupancy"; //座椅压力
+
+typedef struct SeatMotorIdent_T {
+    long zone;//第一排第二排第三排左中右  用来标识哪个座椅
+    long axle;//头枕轴/腰托轴/深度轴等等 用来标识座椅内部的电机， 例如十二向调节座椅
+} SeatMotorIdent;
+
+struct Position {
+    SeatMotorIdent id;//@key
+    long angle; 
+}; 
+
+struct Heat { 
+    short level; 
+    long zone;//@key
+}; 
+
+struct Ventilate { 
+    short level; 
+    long zone;//@key
+}; 
+
+struct Occupancy {
+    short level;
+    long zone;//@key
+};
+
+#pragma keylist Position id.zone id.axle
+#pragma keylist Heat zone
+ 
+}; };  // module msg::seat_msgs 
+ 
+#endif  // __seat_msgs__msg__idl 

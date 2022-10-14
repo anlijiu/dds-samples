@@ -21,7 +21,7 @@ file(GLOB dashboard_sources
 )
 add_executable(${CMAKE_PROJECT_NAME} ${dashboard_sources})
 
-target_link_libraries(${CMAKE_PROJECT_NAME} CycloneDDS-CXX::ddscxx atomic m)
+target_link_libraries(${CMAKE_PROJECT_NAME} CycloneDDS-CXX::ddscxx atomic m hvaclibrary stdmsgslibrary)
 
 # Disable the static analyzer in GCC to avoid crashing the GNU C++ compiler
 # on Azure Pipelines

@@ -380,7 +380,7 @@ bool isEqual(const VehiclePropValue::RawValue& value1, const VehiclePropValue::R
 
 
 uint64_t elapsedRealtimeNano();
-
+uint64_t getUnitTimestamp();
 
 
 
@@ -2438,6 +2438,18 @@ enum class VehicleProperty : int32_t {
      * @access VehiclePropertyAccess:READ_WRITE
      */
     USER_IDENTIFICATION_ASSOCIATION = 299896587 /* (0x0F0B | VehiclePropertyGroup:SYSTEM | VehiclePropertyType:MIXED | VehicleArea:GLOBAL) */,
+
+    /**
+     * 预约驾驶请求
+     * 时间
+     *
+     * int32[0]: 年
+     * int32[1]: 月
+     * int32[2]: 日
+     * int32[3]: 时 (0-23)
+     * int32[4]: 分 (0-59)
+     */
+    APPOINTMENT_DRIVE = 558894864 /* (0x0F10 | VehiclePropertyGroup:VENDOR | VehiclePropertyType:INT64 | VehicleArea:GLOBAL) */,
 };
 
 enum class VehicleGear : int32_t {
@@ -2503,6 +2515,11 @@ enum class VehicleAreaMirror : int32_t {
     DRIVER_LEFT = 1 /* 0x00000001 */,
     DRIVER_RIGHT = 2 /* 0x00000002 */,
     DRIVER_CENTER = 4 /* 0x00000004 */,
+};
+
+enum class VehicleAreaBattery: int32_t {
+    ELECTRIC_VEHICLE_BATTERY = 1,    /*  0x00000001 */
+    STARTING_LIGHTING_IGNITION = 2,    /*  0x00000002 */
 };
 
 enum class VehicleTurnSignal : int32_t {

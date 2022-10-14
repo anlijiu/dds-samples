@@ -1,0 +1,15 @@
+#ifndef __battery_msgs__srv__Prepare_Request__idl 
+#define __battery_msgs__srv__Prepare_Request__idl 
+ 
+module battery_msgs { module srv { 
+ 
+/**
+ * 电池预热准备
+ */
+struct PrepareRequest { 
+    long timepoint;//这个时间点预热好
+}; 
+ 
+}; };  // module srv::battery_msgs
+ 
+#endif  // __battery_msgs__srv__Prepare_Request__idl

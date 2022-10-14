@@ -3,14 +3,18 @@
  
  
 module hvac_msgs { module srv { 
- 
+
+const string TOPIC_SET_AC = "hvac_msgs/srv/SetAc";
+
 /**
  * 空调Ac开关
  */
 struct SetAcRequest { 
     boolean on; 
-    long zone;
+    long zone;//@key
 }; 
+
+#pragma keylist SetAcRequest zone 
  
 }; };  // module srv::hvac_msgs
  

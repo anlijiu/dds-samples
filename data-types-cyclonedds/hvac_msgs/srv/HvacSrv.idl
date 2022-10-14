@@ -1,0 +1,11 @@
+#ifndef __hvac_msgs__srv__idl 
+#define __hvac_msgs__srv__idl 
+ 
+ 
+module hvac_msgs { module srv { 
+
+const string TOPIC_SET_STEERING_WHEEL_HEAT = "hvac_msgs/srv/STEERING_WHEEL_HEAT";
+
+}; };  // module srv::hvac_msgs
+ 
+#endif  // __hvac_msgs__srv__idl 

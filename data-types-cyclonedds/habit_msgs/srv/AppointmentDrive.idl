@@ -1,0 +1,20 @@
+#ifndef __habit_msgs__srv__AppointmentDrive_Request__idl 
+#define __habit_msgs__srv__AppointmentDrive_Request__idl 
+ 
+ 
+module habit_msgs { module srv { 
+
+const string TOPIC_APPOINTMENT_DRIVE = "habit_msgs/srv/AppointmentDrive";
+
+/**
+ * 预约驾驶, 时间戳
+ * 单位: 秒
+ */
+struct AppointmentDriveRequest { 
+    uint64 timestamp;
+}; 
+
+ 
+}; };  // module habit_msgs::srv
+ 
+#endif  // __habit_msgs__srv__AppointmentDrive_Request__idl 

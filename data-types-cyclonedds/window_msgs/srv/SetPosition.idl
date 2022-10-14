@@ -1,0 +1,19 @@
+#ifndef __window_msgs__srv__SetPosition_Request__idl 
+#define __window_msgs__srv__SetPosition_Request__idl 
+ 
+ 
+module window_msgs { module srv { 
+
+/**
+ * Window Position开关
+ */
+struct SetPositionRequest { 
+    long zone; 
+    long percent;
+}; 
+
+#pragma keylist SetPositionRequest zone
+ 
+}; };  // module srv::window_msgs
+ 
+#endif  // __window_msgs__srv__SetPosition_Request__idl

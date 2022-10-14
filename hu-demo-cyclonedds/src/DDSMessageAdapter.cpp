@@ -10,6 +10,8 @@ namespace dds {
 DDSMessageAdapter::DDSMessageAdapter()
     : mAsyncWaitset(AsyncWaitSet(4))
     , mHvacModulePtr(nullptr)
+    , mSeatModulePtr(nullptr)
+    , mHabitModulePtr(nullptr)
 {
     std::cout << __func__ << std::endl;
     int domain_id = 0;
@@ -18,6 +20,12 @@ DDSMessageAdapter::DDSMessageAdapter()
 
     mHvacModulePtr = std::make_unique<hvac::HvacModule>(mAsyncWaitset, std::bind(&DDSMessageAdapter::onNewProperty, this, std::placeholders::_1), getValuePool(), domain_id);
     addWriteMap(mHvacModulePtr->getWritePropValueMap());
+
+    mSeatModulePtr = std::make_unique<seat::SeatModule>(mAsyncWaitset, std::bind(&DDSMessageAdapter::onNewProperty, this, std::placeholders::_1), getValuePool(), domain_id);
+    addWriteMap(mSeatModulePtr->getWritePropValueMap());
+
+    mHabitModulePtr = std::make_unique<habit::HabitModule>(mAsyncWaitset, std::bind(&DDSMessageAdapter::onNewProperty, this, std::placeholders::_1), getValuePool(), domain_id);
+    addWriteMap(mHabitModulePtr->getWritePropValueMap());
 }
 
 DDSMessageAdapter::~DDSMessageAdapter() {

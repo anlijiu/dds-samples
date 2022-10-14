@@ -6,11 +6,11 @@
 #include <dds/sub/ddssub.hpp>
 #include <dds/core/cond/WaitSet.hpp>
 
-#include <std_msgs/srv/Response.hpp>
-#include <hvac_msgs/srv/SetAc.hpp>
+#include <std_msgs/Response.hpp>
+#include <hvac_msgs/SetAc.hpp>
 
 #include "topic_subscriber.hpp"
-#include "hvac_msgs/msg/Ac.hpp"
+#include "hvac_msgs/Ac.hpp"
 #include "vhal_compatible.hpp"
 #include "parallel_hashmap/phmap.h"
 #include "AbsModule.hpp"

@@ -1,0 +1,15 @@
+#ifndef __cloud_msgs__msg__idl 
+#define __cloud_msgs__msg__idl 
+ 
+module cloud_msgs { module msg { 
+
+const string TOPIC_WEATHER_FORCAST_TEMPERATURE = "cloud_msgs/msg/WeatherForcastTemperature";//天气预报未来几天温度  最高温最低温
+
+struct WeatherForcastTemperature {
+    short min[5];
+    short max[5];
+};
+ 
+}; };  // module msg::cloud_msgs 
+ 
+#endif  // __cloud_msgs__msg__idl 

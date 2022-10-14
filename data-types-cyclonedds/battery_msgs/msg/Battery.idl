@@ -1,0 +1,24 @@
+#ifndef __battery_msgs__msg__idl 
+#define __battery_msgs__msg__idl 
+ 
+module battery_msgs { module msg { 
+
+const string TOPIC_BATTERY_REMAINING_POWER = "battery_msgs/msg/RemainingPower";//剩余电量
+const string TOPIC_BATTERY_FORCAST_MIN_TEMP = "battery_msgs/msg/ForcastMinTemperature";//未来几天最低气温
+
+
+//动力电池zone为 1 , 蓄电池 zone为 2
+struct RemainingPower { 
+    long zone;//@key
+    long percent; // 1 - 100
+}; 
+
+struct ForcastMinTemperature {
+    short a[5];//未来五天最低气温， 0 为今天， 1为明天  以此类推
+};
+
+#pragma keylist RemainingPower zone
+ 
+}; };  // module msg::battery_msgs 
+ 
+#endif  // __battery_msgs__msg__idl 
